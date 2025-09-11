@@ -21,5 +21,3 @@ spring:
 
 bot:
   token: ${TELEGRAM_BOT_TOKEN}
-  secret-token: ${BOT_SECRET}
-  webhook-path: /telegram/webhook

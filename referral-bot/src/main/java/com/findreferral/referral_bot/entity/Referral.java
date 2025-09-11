@@ -29,11 +29,11 @@ public class Referral {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "applicant_id", referencedColumnName = "id", nullable = false)
     private Applicant applicant;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "referrer_id", referencedColumnName = "id", nullable = false)
     private Referrer referrer;
 
