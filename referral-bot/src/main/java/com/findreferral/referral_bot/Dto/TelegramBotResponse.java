@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 @Getter
 @Setter
@@ -12,5 +12,5 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @AllArgsConstructor
 public class TelegramBotResponse {
     private String text = null;
-    private InlineKeyboardMarkup replyMarkup = null;
+    private ReplyKeyboard replyKeyboard = null;
 }

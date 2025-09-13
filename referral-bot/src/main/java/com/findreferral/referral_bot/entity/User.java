@@ -39,10 +39,10 @@ public class User {
     @Column(nullable = false)
     private UserRole role = UserRole.NONE; // Role can be NONE, APPLICANT or REFERRER
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Applicant applicant;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Referrer referrer;
 
     public enum UserRole {

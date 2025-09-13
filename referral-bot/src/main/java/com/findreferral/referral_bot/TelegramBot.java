@@ -53,7 +53,7 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
                     .builder()
                     .chatId(chat_id)
                     .text(telegramBotResponse.getText())
-                    .replyMarkup(telegramBotResponse.getReplyMarkup())
+                    .replyMarkup(telegramBotResponse.getReplyKeyboard())
                     .build();
 
             try {
@@ -62,6 +62,11 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
                 e.printStackTrace();
             }
 
+        }
+        else if (update.hasCallbackQuery()) {
+            String callbackData = update.getCallbackQuery().getData();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+            // check callbackData.equals("")
         }
     }
 

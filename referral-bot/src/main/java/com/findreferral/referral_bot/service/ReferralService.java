@@ -17,19 +17,10 @@ public class ReferralService {
 
     private ReferralRepository referralRepository;
 
-    public Referral createReferral(Referral referral) {
+    public void createReferral(Referral referral) {
         referral.setStatus(Referral.ReferralStatus.PENDING);
         referral.setCreated_at(LocalDateTime.now());
         referral.setExpires_at(LocalDateTime.now().plusWeeks(1)); // Example expiry
-        return referralRepository.save(referral);
-    }
-
-    public List<Referral> getReferralsByReferrer(Referrer referrer) {
-        return referralRepository.findAllByReferrer(referrer);
-    }
-
-    public List<Referral> getReferralsByApplicant(Applicant applicant) {
-        return referralRepository.findAllByApplicant(applicant);
     }
 
     public Referral updateStatus(Long referralId, Referral.ReferralStatus status) {
