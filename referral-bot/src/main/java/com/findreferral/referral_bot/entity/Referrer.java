@@ -35,7 +35,8 @@ public class Referrer {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    private String company;
+    @ManyToOne
+    private Company company;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
