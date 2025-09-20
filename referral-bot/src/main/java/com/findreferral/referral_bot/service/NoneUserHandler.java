@@ -16,8 +16,6 @@ public class NoneUserHandler {
     public static final String registerReferrerButtonText = "I wanna be a referrer";
 
     private final UserService userService;
-    private final ApplicantService applicantService;
-    private final ReferrerService referrerService;
 
     public TelegramBotResponse process (User user, Update update) {
         switch (update.getMessage().getText()) {
@@ -30,7 +28,6 @@ public class NoneUserHandler {
                 user.setApplicant(applicant);
 
                 userService.saveUser(user);
-                applicantService.saveApplicant(applicant);
 
                 String askApplicantNameBotText = "Please enter your full name so we can create your applicant profile.";
                 return new TelegramBotResponse(askApplicantNameBotText, null);
@@ -44,7 +41,6 @@ public class NoneUserHandler {
                 user.setReferrer(referrer);
 
                 userService.saveUser(user);
-                referrerService.saveReferrer(referrer);
 
                 String askReferrerNameBotText = "Please enter your full name so applicants know who referred them.";
                 return new TelegramBotResponse(askReferrerNameBotText, null);

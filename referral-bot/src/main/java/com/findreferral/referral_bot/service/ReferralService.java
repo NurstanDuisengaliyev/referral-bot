@@ -1,21 +1,21 @@
 package com.findreferral.referral_bot.service;
 
-import com.findreferral.referral_bot.entity.Applicant;
 import com.findreferral.referral_bot.entity.Referral;
-import com.findreferral.referral_bot.entity.Referrer;
 import com.findreferral.referral_bot.repository.ReferralRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ReferralService {
 
     private ReferralRepository referralRepository;
+
+    public void save(Referral referral) {
+        referralRepository.save(referral);
+    }
 
     public void createReferral(Referral referral) {
         referral.setStatus(Referral.ReferralStatus.PENDING);
