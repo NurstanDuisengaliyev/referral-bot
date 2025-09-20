@@ -2,7 +2,6 @@ package com.findreferral.referral_bot.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -60,6 +59,7 @@ public class Applicant {
     public enum ApplicantState {
         NONE,
         REGISTERING_APPLICANT_NAME,
+        REGISTERING_APPLICANT_EMAIL,
         REGISTERING_APPLICANT_SKILLS,
         REGISTERING_APPLICANT_CV,
         REGISTERING_APPLICANT_COMPANIES,

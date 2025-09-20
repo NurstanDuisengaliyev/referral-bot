@@ -1,5 +1,6 @@
 package com.findreferral.referral_bot.service;
 
+import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referrer;
 import com.findreferral.referral_bot.repository.ReferrerRepository;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,10 @@ public class ReferrerService {
 
     public Referrer saveReferrer(Referrer referrer) {
         return referrerRepository.save(referrer);
+    }
+
+    public Referrer findByCompany(Company company) {
+        return referrerRepository.findByCompany(company);
     }
 
     public List<Referrer> getAllReferrers() {
