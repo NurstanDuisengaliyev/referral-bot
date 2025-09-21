@@ -11,8 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -66,29 +64,18 @@ public class ApplicantHandler {
                     return new TelegramBotResponse("Please upload a CV file (PDF or DOCX).", null);
                 }
 
-                try {
-                    Path filePath = fileService.downloadAndSaveCv(
-                            document.getFileId(),
-                            document.getFileName()
-                    );
+                applicant.setCvFileName(document.getFileName());
+                applicant.setCvFileId(document.getFileId());
+                applicant.setCvFileUniqueId(document.getFileUniqueId());
 
-                    applicant.setCvPath(filePath.toString());
-                    applicant.setCurrentState(Applicant.ApplicantState.REGISTERING_APPLICANT_SKILLS);
-                    applicantService.saveApplicant(applicant);
+                applicant.setCurrentState(Applicant.ApplicantState.REGISTERING_APPLICANT_SKILLS);
+                applicantService.saveApplicant(applicant);
 
-                    String botResponseText = "Your CV has been saved ✅\n" +
-                            "Now, tell us briefly about your key skills, and why you deserve a referral.\n" +
-                            "Please keep it under 500 characters (≈3–5 sentences).";
+                String botResponseText = "Your CV has been saved ✅\n" +
+                        "Now, tell us briefly about your key skills, and why you deserve a referral.\n" +
+                        "Please keep it under 500 characters (≈3–5 sentences).";
 
-                    return new TelegramBotResponse(botResponseText, null);
-
-                } catch (Exception e) {
-                    return new TelegramBotResponse(
-                            "❌ Sorry, something went wrong while saving your CV.\n" +
-                                    "💡 Please try again, and if the file is too large, compress it before sending.",
-                            null
-                    );
-                }
+                return new TelegramBotResponse(botResponseText, null);
             }
             case REGISTERING_APPLICANT_SKILLS -> {
                 String text = update.getMessage().getText();
@@ -217,7 +204,7 @@ public class ApplicantHandler {
                 String botResponseText = "";
                 LocalDateTime now = LocalDateTime.now();
 
-                if (now.isAfter(latestReferral.getExpires_at())) {
+                if (latestReferral == null || now.isAfter(latestReferral.getExpires_at())) {
                     if (text.equals("apply again")) {
                         applicant.setCurrentState(Applicant.ApplicantState.REGISTERING_APPLICANT_NAME);
                         applicantService.saveApplicant(applicant);

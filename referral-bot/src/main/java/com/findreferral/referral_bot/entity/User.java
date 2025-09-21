@@ -33,7 +33,13 @@ public class User {
     private String name;
 
     @Column(unique = true)
+    private String username;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private Long chatId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -17,11 +17,12 @@ import java.util.List;
 public class ReferralMatchingService {
 
     private final ReferralService referralService;
+    private final ReferrerService referrerService;
+    static final int REFERRAL_DAY_LIMIT = 7;
 
     @Transactional
     public List<Referral> matchApplicant(Applicant applicant) {
         List<Referral> createdReferrals = new ArrayList<>();
-        final int REFERRAL_DAY_LIMIT = 7;
 
         for (Company company : applicant.getDesiredCompanies()) {
 

@@ -39,7 +39,14 @@ public class Applicant {
 
     private String skills; // Json of Skills
 
-    private String cvPath; // Url path to the CV
+    @Column(name = "cv_file_id")
+    private String cvFileId;
+
+    @Column(name = "cv_file_unique_id")
+    private String cvFileUniqueId;
+
+    @Column(name = "cv_file_name")
+    private String cvFileName;
 
     @ManyToMany
     @JoinTable(

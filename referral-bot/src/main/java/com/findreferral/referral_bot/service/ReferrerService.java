@@ -4,7 +4,6 @@ import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referrer;
 import com.findreferral.referral_bot.repository.ReferrerRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +14,8 @@ public class ReferrerService {
 
     private ReferrerRepository referrerRepository;
 
-    public Referrer saveReferrer(Referrer referrer) {
-        return referrerRepository.save(referrer);
+    public void saveReferrer(Referrer referrer) {
+        referrerRepository.save(referrer);
     }
 
     public Referrer findByCompany(Company company) {

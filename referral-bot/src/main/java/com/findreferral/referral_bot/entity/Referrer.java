@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -41,6 +42,9 @@ public class Referrer {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReferrerState currentState;
+
+    @Column(name = "last_digest_at")
+    private LocalDateTime lastDigestAt;
 
     @ManyToOne
     @JoinColumn(name = "referral_id", referencedColumnName = "id")

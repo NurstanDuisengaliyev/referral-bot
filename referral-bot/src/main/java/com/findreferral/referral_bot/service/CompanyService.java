@@ -13,11 +13,19 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    void save(Company company) {
+        companyRepository.save(company);
+    }
+
     List<Company> getAvailableCompanies() {
         return companyRepository.findAll()
                 .stream()
                 .filter(company -> !company.getReferrers().isEmpty())
                 .toList();
+    }
+
+    List<Company> getAllCompanies() {
+        return companyRepository.findAll();
     }
 
     Company findByName(String name) {

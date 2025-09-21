@@ -27,7 +27,9 @@ public class TelegramBotService {
 
         if (user == null) {
             user = new User();
+            user.setUsername(update.getMessage().getFrom().getUserName());
             user.setTelegramId(telegramId);
+            user.setChatId(update.getMessage().getChatId());
             user.setRole(User.UserRole.NONE);
             user.setName(update.getMessage().getFrom().getFirstName() + ' ' + update.getMessage().getFrom().getLastName());
             userService.saveUser(user);
