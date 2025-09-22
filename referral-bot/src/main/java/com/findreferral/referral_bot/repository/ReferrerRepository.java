@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReferrerRepository extends JpaRepository<Referrer, Long> {
-    List<Referrer> findByCurrentState(Referrer.ReferrerState state);
+    @Query("""
+    select r
+    from Referrer r
+    where r.currentState in (:states)
+    """)
+    List<Referrer> findByCurrentStates(@Param("states") List<Referrer.ReferrerState> states);
 
     @Query("""
         select r from Referrer r

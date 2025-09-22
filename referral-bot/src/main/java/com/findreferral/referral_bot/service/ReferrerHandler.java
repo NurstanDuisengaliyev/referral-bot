@@ -1,6 +1,7 @@
 package com.findreferral.referral_bot.service;
 
 import com.findreferral.referral_bot.Dto.TelegramBotResponse;
+import com.findreferral.referral_bot.TelegramBot;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
 import com.findreferral.referral_bot.entity.Referrer;
@@ -22,6 +23,7 @@ public class ReferrerHandler {
     private final UserService userService;
     private final CompanyService companyService;
     private final ReferralService referralService;
+    private final TelegramBot telegramBot;
 
     @Transactional
     public TelegramBotResponse process (Long userId, Update update) {
@@ -135,6 +137,7 @@ public class ReferrerHandler {
 
                 if (text.equalsIgnoreCase("Accept")) {
                     currentReferral.setStatus(Referral.ReferralStatus.APPROVED);
+                    notifyApplicantAboutReferral(currentReferral);
                 }
                 else if (text.equalsIgnoreCase("Reject")) {
                     currentReferral.setStatus(Referral.ReferralStatus.REJECTED);
@@ -188,6 +191,15 @@ public class ReferrerHandler {
         );
     }
 
+    private void notifyApplicantAboutReferral(Referral currentReferral) {
+        var applicantUser = currentReferral.getApplicant().getUser();
+        var referrer = currentReferral.getReferrer();
+        String notification = "✅ Your referral request was *ACCEPTED* by "
+                + referrer.getUser().getName()
+                + (referrer.getUser().getUsername() != null ? " (@" + referrer.getUser().getUsername() + ")" : "")
+                + "!\n\n💬 Please contact them directly to discuss further details.";
 
+        telegramBot.sendMessage(applicantUser.getChatId(), notification);
+    }
 
 }
