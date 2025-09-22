@@ -1,6 +1,5 @@
 package com.findreferral.referral_bot.service;
 
-import com.findreferral.referral_bot.entity.Referral;
 import com.findreferral.referral_bot.entity.Referrer;
 import com.findreferral.referral_bot.repository.ReferralRepository;
 import com.findreferral.referral_bot.repository.ReferrerRepository;

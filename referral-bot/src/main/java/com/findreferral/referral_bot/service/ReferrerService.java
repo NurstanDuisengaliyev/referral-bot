@@ -1,12 +1,9 @@
 package com.findreferral.referral_bot.service;
 
-import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referrer;
 import com.findreferral.referral_bot.repository.ReferrerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor

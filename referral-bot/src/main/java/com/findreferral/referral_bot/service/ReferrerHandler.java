@@ -1,7 +1,6 @@
 package com.findreferral.referral_bot.service;
 
 import com.findreferral.referral_bot.Dto.TelegramBotResponse;
-import com.findreferral.referral_bot.TelegramBot;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
 import com.findreferral.referral_bot.entity.Referrer;
