@@ -17,7 +17,9 @@ public class NoneUserHandler {
 
     private final UserService userService;
 
-    public TelegramBotResponse process (User user, Update update) {
+    public TelegramBotResponse process (Long userId, Update update) {
+        User user = userService.findById(userId);
+
         switch (update.getMessage().getText()) {
             case registerApplicantButtonText -> {
                 user.setRole(User.UserRole.APPLICANT);

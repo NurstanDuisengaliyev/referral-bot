@@ -18,19 +18,12 @@ public class ReferrerService {
         referrerRepository.save(referrer);
     }
 
-    public Referrer findByCompany(Company company) {
-        return referrerRepository.findByCompany(company);
+    public Referrer findByUserIdWithReferrals(Long userId) {
+        return referrerRepository.findByUserIdWithReferrals(userId).orElse(null);
     }
 
-    public List<Referrer> getAllReferrers() {
-        return referrerRepository.findAll();
+    public Referrer findByUserIdWithCompany(Long userId) {
+        return referrerRepository.findByUserIdWithCompany(userId).orElse(null);
     }
 
-    public Referrer getReferrerById(Long Id) {
-        return referrerRepository.findById(Id).orElse(null);
-    }
-
-    public void deleteReferrer(Long Id) {
-        referrerRepository.deleteById(Id);
-    }
 }

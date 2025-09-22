@@ -20,7 +20,7 @@ public class ReferralService {
 
     public Referral getFirstPendingReferral(Referrer referrer) {
         try {
-            return referralRepository.findAllActivePending(referrer).getFirst();
+            return referralRepository.findAllActivePending(referrer).get(0);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }

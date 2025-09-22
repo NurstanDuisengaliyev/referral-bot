@@ -4,6 +4,7 @@ import com.findreferral.referral_bot.Dto.TelegramBotResponse;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
 import com.findreferral.referral_bot.entity.Referrer;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -25,7 +26,18 @@ public class ReferrerHandler {
     private final CompanyService companyService;
     private final ReferralService referralService;
 
-    public TelegramBotResponse process (Referrer referrer, Update update) {
+    @Transactional
+    public TelegramBotResponse process (Long userId, Update update) {
+        Referrer referrer = referrerService.findByUserIdWithCompany(userId);
+
+        if (referrer == null) {
+            return new TelegramBotResponse(
+                    "Something went wrong!\n"
+                            + "Send \\start command to re-start.",
+                    null
+            );
+        }
+
         switch (referrer.getCurrentState()) {
             case REGISTERING_REFERRER_NAME -> {
                 String text = update.getMessage().getText();
@@ -68,6 +80,7 @@ public class ReferrerHandler {
                 return new TelegramBotResponse(botResponseText, null);
             }
             case VIEWING_REFERRALS -> {
+                referrer = referrerService.findByUserIdWithReferrals(userId);
                 String text = update.getMessage().getText();
 
                 if (text.equalsIgnoreCase("review")) {
@@ -85,6 +98,7 @@ public class ReferrerHandler {
                 }
             }
             case UPDATING_REFERRAL_STATUS -> {
+                referrer = referrerService.findByUserIdWithReferrals(userId);
                 String text = update.getMessage().getText();
                 Referral currentReferral = referrer.getCurrentReferral();
                 LocalDateTime now = LocalDateTime.now();
@@ -120,6 +134,9 @@ public class ReferrerHandler {
                 }
 
                 return botResponse;
+            }
+            default -> {
+                return new TelegramBotResponse("Type \"review\"", null);
             }
         }
     }

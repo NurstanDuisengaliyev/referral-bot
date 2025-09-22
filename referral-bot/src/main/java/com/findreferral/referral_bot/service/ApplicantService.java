@@ -16,23 +16,24 @@ public class ApplicantService {
 
     private ApplicantRepository applicantRepository;
 
-    public Applicant saveApplicant(Applicant applicant) {
-        return applicantRepository.save(applicant);
+    public void saveApplicant(Applicant applicant) {
+        applicantRepository.save(applicant);
     }
 
-    public List<Applicant> getAllApplicants() {
-        return applicantRepository.findAll();
+    public Applicant findByUserIdWithCompanies(Long userId) {
+        return applicantRepository.findByUserIdWithCompanies(userId).orElse(null);
     }
 
-    public Applicant getApplicantById(Long id) {
-        return applicantRepository.findById(id).orElse(null);
+    public Applicant findByUserIdWithReferrals(Long userId) {
+        return applicantRepository.findByUserIdWithReferrals(userId).orElse(null);
     }
 
-    public void deleteApplicant(Long id) {
-        applicantRepository.deleteById(id);
+    public Applicant findByUserId(Long userId) {
+        return applicantRepository.findByUserId(userId).orElse(null);
     }
 
-    public String getApplicantProfileSummary(Applicant applicant) {
+
+        public String getApplicantProfileSummary(Applicant applicant) {
         String desiredCompaniesText = applicant.getDesiredCompanies()
                 .stream()
                 .map(Company::getName)

@@ -38,9 +38,9 @@ public class TelegramBotService {
         }
 
         return switch (user.getRole()) {
-            case NONE -> noneUserHandler.process(user, update);
-            case APPLICANT -> applicantHandler.process(user.getApplicant(), update);
-            case REFERRER -> referrerHandler.process(user.getReferrer(), update);
+            case NONE -> noneUserHandler.process(user.getId(), update);
+            case APPLICANT -> applicantHandler.process(user.getId(), update);
+            case REFERRER -> referrerHandler.process(user.getId(), update);
         };
 
     }

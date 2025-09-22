@@ -18,7 +18,7 @@ public class CompanyService {
     }
 
     List<Company> getAvailableCompanies() {
-        return companyRepository.findAll()
+        return companyRepository.findAllWithReferrers()
                 .stream()
                 .filter(company -> !company.getReferrers().isEmpty())
                 .toList();

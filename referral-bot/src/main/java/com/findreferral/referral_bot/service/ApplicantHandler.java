@@ -4,6 +4,7 @@ import com.findreferral.referral_bot.Dto.TelegramBotResponse;
 import com.findreferral.referral_bot.entity.Applicant;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Document;
@@ -23,12 +24,22 @@ public class ApplicantHandler {
 
     private final ApplicantService applicantService;
     private final UserService userService;
-    private final FileService fileService;
     private final CompanyService companyService;
     private final ReferralMatchingService referralMatchingService;
     private final ReferralService referralService;
 
-    public TelegramBotResponse process (Applicant applicant, Update update) {
+    @Transactional
+    public TelegramBotResponse process (Long userId, Update update) {
+
+        Applicant applicant = applicantService.findByUserId(userId);
+
+        if (applicant == null) {
+            return new TelegramBotResponse(
+                    "Something went wrong!\n"
+                            + "Send \\start command to re-start.",
+                    null
+            );
+        }
 
         switch (applicant.getCurrentState()) {
 
@@ -107,6 +118,7 @@ public class ApplicantHandler {
                 return new TelegramBotResponse(botResponseText, null);
             }
             case REGISTERING_APPLICANT_COMPANIES -> {
+                applicant = applicantService.findByUserIdWithCompanies(userId);
                 String text = update.getMessage().getText();
 
                 if (text.equals("all")) {
@@ -148,6 +160,7 @@ public class ApplicantHandler {
                 return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
             }
             case APPLYING_FOR_REFERRAL -> {
+                applicant = applicantService.findByUserIdWithCompanies(userId);
                 String text = update.getMessage().getText();
 
                 if (text.equals("Confirm")) {
@@ -187,6 +200,7 @@ public class ApplicantHandler {
                 }
             }
             case WAITING_FOR_REFERRAL -> {
+                applicant = applicantService.findByUserIdWithReferrals(userId);
                 List<Referral> referrals = applicant.getReferrals();
                 Referral latestReferral = applicantService.getLatestReferral(applicant);
                 String text = update.getMessage().getText();
@@ -213,7 +227,7 @@ public class ApplicantHandler {
                                 null);
                     }
 
-                    botResponseText += String.format("Pending: %d, Approved: %d, Rejected: %d\n", pending, approved, pending)
+                    botResponseText += String.format("Pending: %d, Approved: %d, Rejected: %d\n", pending, approved, rejected)
                                     + "\nAlso, you can apply again to all available companies!\n"
                                     + "Use command \"apply again\"";
 
@@ -227,7 +241,7 @@ public class ApplicantHandler {
                     return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
                 }
                 else {
-                    int daysBetween = (int) ChronoUnit.DAYS.between(latestReferral.getExpires_at(), now);
+                    int daysBetween = (int) ChronoUnit.DAYS.between(now, latestReferral.getExpires_at());
 
                     botResponseText += String.format("Pending: %d, Approved: %d, Rejected: %d\n", pending, approved, pending)
                             + "\nAlso, you can apply once again after " + daysBetween + " days!";
