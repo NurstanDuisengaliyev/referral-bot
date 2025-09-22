@@ -32,16 +32,16 @@ public class ReferralService {
         if (applicant.getUser().getUsername() != null) {
             return "👤 " + applicant.getUser().getName() + "\n" +
                     "\uD83D\uDCAC @" + applicant.getUser().getUsername() + "\n" +
-                    "📧 " + applicant.getUser().getEmail() + "\n" +
-                    applicant.getSkills() + "\n" +
+                    "📧 " + applicant.getUser().getEmail() + "\n\n" +
+                    applicant.getSkills() + "\n\n" +
                     "📄 " + applicant.getCvFileName() + "(CV uploaded)" + "\n" +
                     "⏰ Expires: " + referral.getExpires_at().toLocalDate() + "\n"
                     + "\nChoose \"Accept\" or \"Reject\"";
         }
         else {
             return "👤 " + applicant.getUser().getName() + "\n" +
-                    "📧 " + applicant.getUser().getEmail() + "\n" +
-                    applicant.getSkills() + "\n" +
+                    "📧 " + applicant.getUser().getEmail() + "\n\n" +
+                    applicant.getSkills() + "\n\n" +
                     "📄 " + applicant.getCvFileName() + "(CV uploaded)" + "\n" +
                     "⏰ Expires: " + referral.getExpires_at().toLocalDate() + "\n"
                     + "\nChoose \"Accept\" or \"Reject\"";

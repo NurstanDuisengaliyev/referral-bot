@@ -10,11 +10,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -77,7 +74,14 @@ public class ReferrerHandler {
                         "✅ All set! You’ll receive a daily digest of active applicants at 12:00 (Astana).\n" +
                                 "You can also type \"review\" anytime to browse candidates now.";
 
-                return new TelegramBotResponse(botResponseText, null);
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                        true,
+                        true,
+                        "review"
+                );
+
+                return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
             }
             case VIEWING_REFERRALS -> {
                 referrer = referrerService.findByUserIdWithReferrals(userId);
@@ -94,7 +98,12 @@ public class ReferrerHandler {
                     return botResponse;
                 }
                 else {
-                    return new TelegramBotResponse("Type \"review\"", null);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            true,
+                            true,
+                            "review"
+                    );
+                    return new TelegramBotResponse("Type \"review\"", replyKeyboardMarkup);
                 }
             }
             case UPDATING_REFERRAL_STATUS -> {
@@ -111,10 +120,16 @@ public class ReferrerHandler {
                     referrer.setCurrentState(Referrer.ReferrerState.VIEWING_REFERRALS);
                     referrerService.saveReferrer(referrer);
 
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            true,
+                            true,
+                            "review"
+                    );
+
                     return new TelegramBotResponse(
                             "⚠️ This application expired or was already processed.\n"
                             + "Type \"review\" to browse new candidates now.",
-                            null
+                            replyKeyboardMarkup
                     );
                 }
 
@@ -136,7 +151,12 @@ public class ReferrerHandler {
                 return botResponse;
             }
             default -> {
-                return new TelegramBotResponse("Type \"review\"", null);
+                ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                        true,
+                        true,
+                        "review"
+                );
+                return new TelegramBotResponse("Type \"review\"", replyKeyboardMarkup);
             }
         }
     }
@@ -155,14 +175,11 @@ public class ReferrerHandler {
 
         String botResponseText = referralService.getReferralText(firstPendingReferral);
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add("Accept");
-        row1.add("Reject");
-        keyboard.add(row1);
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
-        replyKeyboardMarkup.setResizeKeyboard(true);
+        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                false,
+                true,
+                "Accept", "Reject"
+        );
 
         return new TelegramBotResponse(
                 botResponseText,

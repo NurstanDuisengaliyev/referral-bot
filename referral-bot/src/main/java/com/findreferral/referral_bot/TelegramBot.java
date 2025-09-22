@@ -51,7 +51,7 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
             TelegramBotResponse telegramBotResponse = telegramBotService.process(update);
 
             if (telegramBotResponse.getInputFile() == null) {
-                SendMessage message = SendMessage // Create a message object
+                SendMessage message = SendMessage
                         .builder()
                         .chatId(chat_id)
                         .text(telegramBotResponse.getText())
@@ -78,11 +78,6 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
                     e.printStackTrace();
                 }
             }
-        }
-        else if (update.hasCallbackQuery()) {
-            String callbackData = update.getCallbackQuery().getData();
-            long chatId = update.getCallbackQuery().getMessage().getChatId();
-            // check callbackData.equals("")
         }
     }
 

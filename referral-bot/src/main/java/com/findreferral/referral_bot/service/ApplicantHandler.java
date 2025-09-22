@@ -115,7 +115,13 @@ public class ApplicantHandler {
                                 "Example: Google, Bloomberg, Jane Street\n\n" +
                                 "Or, just type \"all\"";
 
-                return new TelegramBotResponse(botResponseText, null);
+                ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                        true,
+                        true,
+                        "all"
+                );
+
+                return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
             }
             case REGISTERING_APPLICANT_COMPANIES -> {
                 applicant = applicantService.findByUserIdWithCompanies(userId);
@@ -149,13 +155,11 @@ public class ApplicantHandler {
 
                 String botResponseText = applicantService.getApplicantProfileSummary(applicant);
 
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row1 = new KeyboardRow();
-                row1.add("Confirm");
-                row1.add("Restart");
-                keyboard.add(row1);
-                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-                replyKeyboardMarkup.setOneTimeKeyboard(true);
+                ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                        true,
+                        true,
+                        "Confirm", "Restart"
+                );
 
                 return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
             }
@@ -169,11 +173,11 @@ public class ApplicantHandler {
                     applicant.setCurrentState(Applicant.ApplicantState.WAITING_FOR_REFERRAL);
                     applicantService.saveApplicant(applicant);
 
-                    List<KeyboardRow> keyboard = new ArrayList<>();
-                    KeyboardRow row1 = new KeyboardRow("check");
-                    keyboard.add(row1);
-                    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-                    replyKeyboardMarkup.setOneTimeKeyboard(false);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            false,
+                            true,
+                            "check"
+                    );
 
                     return new TelegramBotResponse(
                             "Your profile was sent to " + createdReferrals.size() + " referrers.\n"
@@ -181,7 +185,6 @@ public class ApplicantHandler {
                             + "Or, you can check the real-time results with \"check\" command!",
                             replyKeyboardMarkup
                     );
-
                 }
                 else if (text.equals("Restart")) {
                     applicant.setCurrentState(Applicant.ApplicantState.REGISTERING_APPLICANT_NAME);
@@ -189,13 +192,11 @@ public class ApplicantHandler {
                     return new TelegramBotResponse("Okay.\nPlease enter your full name so we can create your applicant profile.", null);
                 }
                 else {
-                    List<KeyboardRow> keyboard = new ArrayList<>();
-                    KeyboardRow row1 = new KeyboardRow();
-                    row1.add("Confirm");
-                    row1.add("Restart");
-                    keyboard.add(row1);
-                    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-                    replyKeyboardMarkup.setOneTimeKeyboard(true);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            true,
+                            true,
+                            "Confirm", "Restart"
+                    );
                     return new TelegramBotResponse("\"Confirm\" Or \"Restart\"", replyKeyboardMarkup);
                 }
             }
@@ -232,21 +233,27 @@ public class ApplicantHandler {
                                     + "Use command \"apply again\"";
 
 
-                    List<KeyboardRow> keyboard = new ArrayList<>();
-                    KeyboardRow row1 = new KeyboardRow();
-                    row1.add("apply again");
-                    keyboard.add(row1);
-                    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-                    replyKeyboardMarkup.setOneTimeKeyboard(true);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            true,
+                            true,
+                            "apply again"
+                    );
+
                     return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
                 }
                 else {
                     int daysBetween = (int) ChronoUnit.DAYS.between(now, latestReferral.getExpires_at());
 
-                    botResponseText += String.format("Pending: %d, Approved: %d, Rejected: %d\n", pending, approved, pending)
+                    botResponseText += String.format("Pending: %d, Approved: %d, Rejected: %d\n", pending, approved, rejected)
                             + "\nAlso, you can apply once again after " + daysBetween + " days!";
 
-                    return new TelegramBotResponse(botResponseText, null);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                            false,
+                            true,
+                            "check"
+                    );
+
+                    return new TelegramBotResponse(botResponseText, replyKeyboardMarkup);
                 }
             }
             default -> {

@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -56,13 +53,11 @@ public class TelegramBotService {
                 Please choose an option below:""";
 
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(NoneUserHandler.registerApplicantButtonText);
-        row1.add(NoneUserHandler.registerReferrerButtonText);
-        keyboard.add(row1);
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(keyboard);
-        replyKeyboardMarkup.setOneTimeKeyboard(true);
+        ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                true,
+                true,
+                NoneUserHandler.registerApplicantButtonText, NoneUserHandler.registerReferrerButtonText
+        );
 
         response.setText(initialMessage);
         response.setReplyKeyboard(replyKeyboardMarkup);
