@@ -8,9 +8,12 @@ import com.findreferral.referral_bot.entity.Referrer;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -23,7 +26,7 @@ public class ReferrerHandler {
     private final UserService userService;
     private final CompanyService companyService;
     private final ReferralService referralService;
-    private final TelegramBot telegramBot;
+    private final TelegramClient telegramClient;
 
     @Transactional
     public TelegramBotResponse process (Long userId, Update update) {
@@ -199,7 +202,16 @@ public class ReferrerHandler {
                 + (referrer.getUser().getUsername() != null ? " (@" + referrer.getUser().getUsername() + ")" : "")
                 + "!\n\n💬 Please contact them directly to discuss further details.";
 
-        telegramBot.sendMessage(applicantUser.getChatId(), notification);
+        SendMessage message = SendMessage
+                .builder()
+                .chatId(applicantUser.getChatId())
+                .text(notification)
+                .build();
+        try {
+            telegramClient.execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 }

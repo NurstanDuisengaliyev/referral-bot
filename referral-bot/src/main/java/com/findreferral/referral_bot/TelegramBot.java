@@ -86,17 +86,4 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
         System.out.println("Registered bot running state is: " + botSession.isRunning());
     }
 
-    public void sendMessage(Long chatId, String text) {
-        SendMessage message = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(text)
-                .build();
-        try {
-            telegramClient.execute(message); // Sending our message object to user
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
