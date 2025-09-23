@@ -4,6 +4,7 @@ import com.findreferral.referral_bot.Dto.TelegramBotResponse;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
 import com.findreferral.referral_bot.entity.Referrer;
+import com.findreferral.referral_bot.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,11 @@ public class ReferrerHandler {
         Referrer referrer = referrerService.findByUserIdWithCompany(userId);
 
         if (referrer == null) {
+
+            User user = userService.findById(userId);
+            user.setRole(User.UserRole.NONE);
+            userService.saveUser(user);
+
             return new TelegramBotResponse(
                     "Something went wrong!\n"
                             + "Send \\start command to re-start.",
@@ -196,7 +202,8 @@ public class ReferrerHandler {
     private void notifyApplicantAboutReferral(Referral currentReferral) {
         var applicantUser = currentReferral.getApplicant().getUser();
         var referrer = currentReferral.getReferrer();
-        String notification = "✅ Your referral request was *ACCEPTED* by "
+        String notification = "✅ " + referrer.getCompany().getName() + '\n' +
+                "Your referral request was **ACCEPTED** by "
                 + referrer.getUser().getName()
                 + (referrer.getUser().getUsername() != null ? " (@" + referrer.getUser().getUsername() + ")" : "")
                 + "!\n\n💬 Please contact them directly to discuss further details.";

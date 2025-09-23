@@ -7,6 +7,7 @@ import com.findreferral.referral_bot.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 @Component
 @AllArgsConstructor
@@ -48,7 +49,14 @@ public class NoneUserHandler {
                 return new TelegramBotResponse(askReferrerNameBotText, null);
             }
             default -> {
-                return new TelegramBotResponse("Some Error happened, start all over again(", null);
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = (ReplyKeyboardMarkup) TelegramBotResponse.createReplyKeyboard(
+                        true,
+                        true,
+                        registerApplicantButtonText, registerReferrerButtonText
+                );
+
+                return new TelegramBotResponse("Choose.", replyKeyboardMarkup);
             }
         }
     }

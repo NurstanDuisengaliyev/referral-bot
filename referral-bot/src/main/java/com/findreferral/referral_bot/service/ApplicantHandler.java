@@ -4,6 +4,7 @@ import com.findreferral.referral_bot.Dto.TelegramBotResponse;
 import com.findreferral.referral_bot.entity.Applicant;
 import com.findreferral.referral_bot.entity.Company;
 import com.findreferral.referral_bot.entity.Referral;
+import com.findreferral.referral_bot.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,10 @@ public class ApplicantHandler {
         Applicant applicant = applicantService.findByUserId(userId);
 
         if (applicant == null) {
+            User user = userService.findById(userId);
+            user.setRole(User.UserRole.NONE);
+            userService.saveUser(user);
+
             return new TelegramBotResponse(
                     "Something went wrong!\n"
                             + "Send \\start command to re-start.",
