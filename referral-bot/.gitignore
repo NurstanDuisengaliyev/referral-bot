@@ -35,5 +35,3 @@ build/
 
 # Ignore environment files
 .env
-*.env
-.env
